@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eaut_student_care_state_user,eaut.student.care.state.user,model_eaut_student_care_state,group_eaut_student_care_user,1,0,0,0
+access_eaut_student_care_state_admin,eaut.student.care.state.admin,model_eaut_student_care_state,group_eaut_student_care_admin,1,1,1,1
+access_eaut_student_care_semester_user,eaut.student.care.semester.user,model_eaut_student_care_semester,group_eaut_student_care_user,1,0,0,0
+access_eaut_student_care_semester_admin,eaut.student.care.semester.admin,model_eaut_student_care_semester,group_eaut_student_care_admin,1,1,1,1
+access_eaut_student_care_course_user,eaut.student.care.course.user,model_eaut_student_care_course,group_eaut_student_care_user,1,0,0,0
+access_eaut_student_care_course_admin,eaut.student.care.course.admin,model_eaut_student_care_course,group_eaut_student_care_admin,1,1,1,1
+access_eaut_student_care_grade_user,eaut.student.care.grade.user,model_eaut_student_care_grade,group_eaut_student_care_user,1,1,1,1
+access_eaut_student_care_grade_admin,eaut.student.care.grade.admin,model_eaut_student_care_grade,group_eaut_student_care_admin,1,1,1,1
+access_eaut_student_care_timetable_user,eaut.student.care.timetable.user,model_eaut_student_care_timetable,group_eaut_student_care_user,1,1,1,1
+access_eaut_student_care_timetable_admin,eaut.student.care.timetable.admin,model_eaut_student_care_timetable,group_eaut_student_care_admin,1,1,1,1

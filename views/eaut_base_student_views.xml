@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eaut_base_student_form_inherit_student_care" model="ir.ui.view">
+        <field name="name">eaut.base.student.form.inherit.student.care</field>
+        <field name="model">eaut.base.student</field>
+        <field name="inherit_id" ref="eaut_base.view_eaut_base_student_form"/>
+        <field name="arch" type="xml">
+
+            <field name="photo" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button type="object" name="action_view_grades"
+                            class="oe_stat_button" icon="fa-graduation-cap">
+                        <field name="grade_count" widget="statinfo" string="Bảng điểm"/>
+                    </button>
+                    <button type="object" name="action_view_debt_courses"
+                            class="oe_stat_button" icon="fa-exclamation-triangle">
+                        <field name="debt_course_count" widget="statinfo" string="Nợ môn"/>
+                    </button>
+                    <button type="object" name="action_view_timetable"
+                            class="oe_stat_button" icon="fa-calendar">
+                        <field name="timetable_count" widget="statinfo" string="TKB"/>
+                    </button>
+                    <button type="object" name="action_view_helpdesk_tickets"
+                            class="oe_stat_button" icon="fa-life-ring">
+                        <field name="helpdesk_ticket_count" widget="statinfo" string="Phiếu hỗ trợ"/>
+                    </button>
+                </div>
+            </field>
+
+            <field name="program_id" position="after">
+                <field name="state_id"/>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>

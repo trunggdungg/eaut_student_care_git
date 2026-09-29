@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_eaut_student_care_root"
+              name="Chăm sóc sinh viên"
+              sequence="15"/>
+
+    <!-- Sinh viên (model + view/action định nghĩa ở eaut_base, chỉ tạo lối vào ở đây) -->
+    <menuitem id="menu_eaut_student_care_student"
+              name="Sinh viên"
+              parent="menu_eaut_student_care_root"
+              action="eaut_base.action_eaut_base_student"
+              sequence="10"/>
+
+    <menuitem id="menu_eaut_student_care_grade"
+              name="Bảng điểm"
+              parent="menu_eaut_student_care_root"
+              action="action_eaut_student_care_grade"
+              sequence="20"/>
+
+    <menuitem id="menu_eaut_student_care_timetable"
+              name="Thời khóa biểu"
+              parent="menu_eaut_student_care_root"
+              action="action_eaut_student_care_timetable"
+              sequence="30"/>
+
+    <!-- Danh mục: dữ liệu nền + danh mục cấu hình riêng của app -->
+    <menuitem id="menu_eaut_student_care_config"
+              name="Danh mục"
+              parent="menu_eaut_student_care_root"
+              sequence="90"/>
+
+    <menuitem id="menu_eaut_student_care_faculty"
+              name="Khoa"
+              parent="menu_eaut_student_care_config"
+              action="eaut_base.action_eaut_base_faculty"
+              sequence="10"/>
+
+    <menuitem id="menu_eaut_student_care_major"
+              name="Ngành"
+              parent="menu_eaut_student_care_config"
+              action="eaut_base.action_eaut_base_major"
+              sequence="20"/>
+
+    <menuitem id="menu_eaut_student_care_program"
+              name="Khóa"
+              parent="menu_eaut_student_care_config"
+              action="eaut_base.action_eaut_base_program"
+              sequence="30"/>
+
+    <menuitem id="menu_eaut_student_care_semester"
+              name="Học kỳ"
+              parent="menu_eaut_student_care_config"
+              action="action_eaut_student_care_semester"
+              sequence="40"/>
+
+    <menuitem id="menu_eaut_student_care_course"
+              name="Môn học"
+              parent="menu_eaut_student_care_config"
+              action="action_eaut_student_care_course"
+              sequence="50"/>
+
+    <menuitem id="menu_eaut_student_care_state"
+              name="Trạng thái"
+              parent="menu_eaut_student_care_config"
+              action="action_eaut_student_care_state"
+              sequence="60"/>
+
+</odoo>

@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+
+from odoo import _, api, fields, models
+from odoo.osv import expression
+
+
+class EautBaseStudent(models.Model):
+    _inherit = 'eaut.base.student'
+
+    # Trạng thái sinh viên - danh mục do quản trị viên tự tạo/cấu hình
+    state_id = fields.Many2one(
+        'eaut.student.care.state',
+        string='Trạng thái',
+        tracking=True,
+    )
+
+    grade_ids = fields.One2many('eaut.student.care.grade', 'student_id', string='Bảng điểm')
+    timetable_ids = fields.One2many('eaut.student.care.timetable', 'student_id', string='Thời khóa biểu')
+
+    grade_count = fields.Integer(string='Số môn đã có điểm', compute='_compute_grade_count')
+    debt_course_count = fields.Integer(string='Số môn đang nợ', compute='_compute_grade_count')
+    timetable_count = fields.Integer(string='Số buổi học', compute='_compute_timetable_count')
+    helpdesk_ticket_count = fields.Integer(string='Số phiếu hỗ trợ', compute='_compute_helpdesk_ticket_count')
+
+    def _compute_grade_count(self):
+        Grade = self.env['eaut.student.care.grade']
+        for student in self:
+            student.grade_count = Grade.search_count([('student_id', '=', student.id)])
+            student.debt_course_count = Grade.search_count([
+                ('student_id', '=', student.id),
+                ('result', '=', 'failed'),
+            ])
+
+    def _compute_timetable_count(self):
+        Timetable = self.env['eaut.student.care.timetable']
+        for student in self:
+            student.timetable_count = Timetable.search_count([('student_id', '=', student.id)])
+
+    def _compute_helpdesk_ticket_count(self):
+        Ticket = self.env['helpdesk.ticket']
+        for student in self:
+            student.helpdesk_ticket_count = Ticket.search_count(student._helpdesk_ticket_domain())
+
+    def _helpdesk_ticket_domain(self):
+        """Phiếu hỗ trợ (eaut_helpdesk) không có quan hệ trực tiếp tới sinh viên,
+        nên đối chiếu theo mã sinh viên / email / số điện thoại."""
+        self.ensure_one()
+        matches = []
+        if self.code:
+            matches.append([('student_code', '=', self.code)])
+        if self.email:
+            matches.append([('partner_email', '=', self.email)])
+        if self.phone:
+            matches.append([('partner_phone', '=', self.phone)])
+        if not matches:
+            return [('id', '=', 0)]
+        return expression.OR(matches)
+
+    def action_view_grades(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Bảng điểm'),
+            'res_model': 'eaut.student.care.grade',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id)],
+            'context': {'default_student_id': self.id},
+        }
+
+    def action_view_debt_courses(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Môn đang nợ'),
+            'res_model': 'eaut.student.care.grade',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id), ('result', '=', 'failed')],
+            'context': {'default_student_id': self.id},
+        }
+
+    def action_view_timetable(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Thời khóa biểu'),
+            'res_model': 'eaut.student.care.timetable',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id)],
+            'context': {'default_student_id': self.id},
+        }
+
+    def action_view_helpdesk_tickets(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Phiếu hỗ trợ'),
+            'res_model': 'helpdesk.ticket',
+            'view_mode': 'list,form',
+            'domain': self._helpdesk_ticket_domain(),
+        }

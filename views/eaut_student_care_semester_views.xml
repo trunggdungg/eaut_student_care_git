@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eaut_student_care_semester_list" model="ir.ui.view">
+        <field name="name">eaut.student.care.semester.list</field>
+        <field name="model">eaut.student.care.semester</field>
+        <field name="arch" type="xml">
+            <list string="Học kỳ">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eaut_student_care_semester_form" model="ir.ui.view">
+        <field name="name">eaut.student.care.semester.form</field>
+        <field name="model">eaut.student.care.semester</field>
+        <field name="arch" type="xml">
+            <form string="Học kỳ">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="VD: Học kỳ 1 - 2025-2026"/></h1>
+                    </div>
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="sequence"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eaut_student_care_semester" model="ir.actions.act_window">
+        <field name="name">Học kỳ</field>
+        <field name="res_model">eaut.student.care.semester</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

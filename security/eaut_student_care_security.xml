@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="module_category_eaut_student_care" model="ir.module.category">
+        <field name="name">Chăm sóc sinh viên</field>
+        <field name="description">
+            Phân quyền cho hệ thống chăm sóc sinh viên EAUT
+        </field>
+        <field name="sequence">31</field>
+    </record>
+
+    <record id="res_groups_privilege_eaut_student_care" model="res.groups.privilege">
+        <field name="name">Chăm sóc sinh viên</field>
+        <field name="sequence">31</field>
+        <field name="category_id" ref="module_category_eaut_student_care"/>
+    </record>
+
+    <!-- Người dùng -->
+    <record id="group_eaut_student_care_user" model="res.groups">
+        <field name="name">Người dùng</field>
+        <field name="privilege_id" ref="res_groups_privilege_eaut_student_care"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Quản trị viên -->
+    <record id="group_eaut_student_care_admin" model="res.groups">
+        <field name="name">Quản trị viên</field>
+        <field name="privilege_id" ref="res_groups_privilege_eaut_student_care"/>
+        <field name="implied_ids" eval="[(4, ref('group_eaut_student_care_user'))]"/>
+    </record>
+
+</odoo>
