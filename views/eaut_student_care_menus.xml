@@ -24,6 +24,12 @@
               action="action_eaut_student_care_timetable"
               sequence="30"/>
 
+    <menuitem id="menu_eaut_student_care_conduct"
+              name="Điểm rèn luyện"
+              parent="menu_eaut_student_care_root"
+              action="action_eaut_student_care_conduct"
+              sequence="40"/>
+
     <!-- Danh mục: dữ liệu nền + danh mục cấu hình riêng của app -->
     <menuitem id="menu_eaut_student_care_config"
               name="Danh mục"
@@ -59,6 +65,12 @@
               parent="menu_eaut_student_care_config"
               action="action_eaut_student_care_course"
               sequence="50"/>
+
+    <menuitem id="menu_eaut_student_care_major_course"
+              name="Khung chương trình đào tạo"
+              parent="menu_eaut_student_care_config"
+              action="action_eaut_student_care_major_course"
+              sequence="55"/>
 
     <menuitem id="menu_eaut_student_care_state"
               name="Trạng thái"

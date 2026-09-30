@@ -9,7 +9,14 @@
                 <field name="student_id"/>
                 <field name="semester_id"/>
                 <field name="course_id"/>
-                <field name="score"/>
+                <field name="lan_hoc"/>
+                <field name="lan_thi"/>
+                <field name="score_cc"/>
+                <field name="score_gk"/>
+                <field name="score_thi"/>
+                <field name="score_10"/>
+                <field name="score_4"/>
+                <field name="score_letter"/>
                 <field name="result"/>
                 <field name="note"/>
             </list>
@@ -27,10 +34,17 @@
                             <field name="student_id"/>
                             <field name="semester_id"/>
                             <field name="course_id"/>
+                            <field name="lan_hoc"/>
+                            <field name="lan_thi"/>
                         </group>
                         <group>
-                            <field name="score"/>
-                            <field name="result" readonly="1"/>
+                            <field name="score_cc"/>
+                            <field name="score_gk"/>
+                            <field name="score_thi"/>
+                            <field name="score_10"/>
+                            <field name="score_4"/>
+                            <field name="score_letter"/>
+                            <field name="result"/>
                             <field name="note"/>
                         </group>
                     </group>
