@@ -131,6 +131,102 @@ class EautBaseStudent(models.Model):
             'Vui lòng liên hệ quản trị viên để thiết lập trước khi đồng bộ.'
         ))
 
+    def generate_demo_data(self):
+        State = self.env['eaut.student.care.state']
+        Semester = self.env['eaut.student.care.semester']
+        Course = self.env['eaut.student.care.course']
+        Classroom = self.env['eaut.student.care.classroom']
+        Grade = self.env['eaut.student.care.grade']
+        Conduct = self.env['eaut.student.care.conduct']
+        Major = self.env['eaut.base.major']
+
+        def get_or_create(Model, domain, values):
+            return Model.search(domain, limit=1) or Model.create(values)
+
+        for name in ('Đang học', 'Bảo lưu', 'Thôi học'):
+            get_or_create(State, [('name', '=', name)], {'name': name})
+
+        semesters = [
+            get_or_create(Semester, [('name', '=', name)], {
+                'name': name, 'date_start': date_start, 'date_end': date_end,
+            })
+            for name, date_start, date_end in (
+                ('Học kỳ 1 - 2025-2026', '2025-09-01', '2026-01-15'),
+                ('Học kỳ 2 - 2025-2026', '2026-02-01', '2026-06-15'),
+            )
+        ]
+
+        courses = [
+            get_or_create(Course, [('code', '=', code)], {
+                'code': code, 'name': name, 'credit': credit,
+            })
+            for code, name, credit in (
+                ('LTC001', 'Lập trình C', 3),
+                ('CSDL001', 'Cơ sở dữ liệu', 3),
+                ('GT001', 'Giải tích 1', 2),
+            )
+        ]
+
+        major = Major.search([], limit=1)
+        classroom = get_or_create(Classroom, [('name', '=', 'Lớp demo')], {
+            'name': 'Lớp demo', 'major_id': major.id if major else False,
+        })
+
+        students = self.search([], limit=20)
+        if not students:
+            raise UserError(_(
+                'Chưa có sinh viên nào trong hệ thống. '
+                'Vui lòng tạo ít nhất 1 sinh viên trước khi tạo dữ liệu mẫu.'
+            ))
+
+        sample_scores = [8.5, 7.0, 9.0, 5.5]
+        grade_created = 0
+        conduct_created = 0
+        for student in students:
+            if not student.classroom_id:
+                student.classroom_id = classroom.id
+            for s_index, semester in enumerate(semesters):
+                if not Conduct.search_count([
+                    ('student_id', '=', student.id), ('semester_id', '=', semester.id),
+                ]):
+                    Conduct.create({
+                        'student_id': student.id,
+                        'semester_id': semester.id,
+                        'score': 85 - s_index * 5,
+                        'classification': 'Tốt',
+                    })
+                    conduct_created += 1
+                for c_index, course in enumerate(courses):
+                    if Grade.search_count([
+                        ('student_id', '=', student.id),
+                        ('semester_id', '=', semester.id),
+                        ('course_id', '=', course.id),
+                    ]):
+                        continue
+                    score = sample_scores[(s_index + c_index) % len(sample_scores)]
+                    Grade.create({
+                        'student_id': student.id,
+                        'semester_id': semester.id,
+                        'course_id': course.id,
+                        'score_10': score,
+                        'score_4': round(score / 2.5, 1),
+                        'score_letter': 'A' if score >= 8.5 else ('B' if score >= 7 else 'C'),
+                        'result': 'passed' if score >= 4 else 'failed',
+                    })
+                    grade_created += 1
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Đã tạo dữ liệu mẫu'),
+                'message': _('%s dòng điểm, %s dòng điểm rèn luyện cho %s sinh viên.') % (
+                    grade_created, conduct_created, len(students)),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
+
     def action_view_helpdesk_tickets(self):
         self.ensure_one()
         return {

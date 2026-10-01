@@ -84,4 +84,11 @@
               action="action_eaut_student_care_state"
               sequence="60"/>
 
+    <menuitem id="menu_eaut_student_care_demo_data"
+              name="Tạo dữ liệu mẫu"
+              parent="menu_eaut_student_care_config"
+              action="action_server_eaut_student_care_demo_data"
+              groups="group_eaut_student_care_admin"
+              sequence="90"/>
+
 </odoo>
