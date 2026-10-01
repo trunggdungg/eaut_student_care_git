@@ -2,7 +2,6 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.osv import expression
 
 
 class EautBaseStudent(models.Model):
@@ -55,14 +54,15 @@ class EautBaseStudent(models.Model):
         self.ensure_one()
         matches = []
         if self.code:
-            matches.append([('student_code', '=', self.code)])
+            matches.append(('student_code', '=', self.code))
         if self.email:
-            matches.append([('partner_email', '=', self.email)])
+            matches.append(('partner_email', '=', self.email))
         if self.phone:
-            matches.append([('partner_phone', '=', self.phone)])
+            matches.append(('partner_phone', '=', self.phone))
         if not matches:
             return [('id', '=', 0)]
-        return expression.OR(matches)
+        # Domain OR theo ký pháp tiền tố: n điều kiện cần (n-1) toán tử '|'.
+        return ['|'] * (len(matches) - 1) + matches
 
     def action_view_grades(self):
         self.ensure_one()
