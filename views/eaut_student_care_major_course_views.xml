@@ -43,9 +43,8 @@
                 <field name="course_id"/>
                 <filter name="required" string="Bắt buộc" domain="[('is_required', '=', True)]"/>
                 <filter name="elective" string="Tự chọn" domain="[('is_required', '=', False)]"/>
-                <group expand="0" string="Nhóm theo">
-                    <filter name="group_major" string="Ngành" context="{'group_by': 'major_id'}"/>
-                </group>
+                <separator/>
+                <filter name="group_major" string="Ngành" context="{'group_by': 'major_id'}"/>
             </search>
         </field>
     </record>
