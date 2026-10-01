@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_eaut_student_care_major_course_list" model="ir.ui.view">
+        <field name="name">eaut.student.care.major.course.list</field>
+        <field name="model">eaut.student.care.major.course</field>
+        <field name="arch" type="xml">
+            <list string="Khung chương trình đào tạo" editable="bottom">
+                <field name="major_id"/>
+                <field name="course_id"/>
+                <field name="credit"/>
+                <field name="semester_order"/>
+                <field name="is_required" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_eaut_student_care_major_course_form" model="ir.ui.view">
+        <field name="name">eaut.student.care.major.course.form</field>
+        <field name="model">eaut.student.care.major.course</field>
+        <field name="arch" type="xml">
+            <form string="Khung chương trình đào tạo">
+                <sheet>
+                    <group>
+                        <field name="major_id"/>
+                        <field name="course_id"/>
+                        <field name="credit"/>
+                        <field name="semester_order"/>
+                        <field name="is_required"/>
+                        <field name="sequence"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_eaut_student_care_major_course_search" model="ir.ui.view">
+        <field name="name">eaut.student.care.major.course.search</field>
+        <field name="model">eaut.student.care.major.course</field>
+        <field name="arch" type="xml">
+            <search string="Khung chương trình đào tạo">
+                <field name="major_id"/>
+                <field name="course_id"/>
+                <filter name="required" string="Bắt buộc" domain="[('is_required', '=', True)]"/>
+                <filter name="elective" string="Tự chọn" domain="[('is_required', '=', False)]"/>
+                  <separator/>
+                <filter name="group_major" string="Ngành" context="{'group_by': 'major_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_eaut_student_care_major_course" model="ir.actions.act_window">
+        <field name="name">Khung chương trình đào tạo</field>
+        <field name="res_model">eaut.student.care.major.course</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_major': 1}</field>
+    </record>
+
+</odoo>

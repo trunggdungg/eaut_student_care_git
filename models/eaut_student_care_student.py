@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import _, api, fields, models
-from odoo.osv import expression
-
+from odoo.exceptions import UserError
 
 class EautBaseStudent(models.Model):
     _inherit = 'eaut.base.student'
@@ -14,12 +13,26 @@ class EautBaseStudent(models.Model):
         tracking=True,
     )
 
+    classroom_id = fields.Many2one(
+        'eaut.student.care.classroom',
+        string='Lớp',
+        tracking=True,
+    )
+    gender = fields.Selection([
+        ('male', 'Nam'),
+        ('female', 'Nữ'),
+        ('other', 'Khác'),
+    ], string='Giới tính')
+
+
     grade_ids = fields.One2many('eaut.student.care.grade', 'student_id', string='Bảng điểm')
     timetable_ids = fields.One2many('eaut.student.care.timetable', 'student_id', string='Thời khóa biểu')
+    conduct_ids = fields.One2many('eaut.student.care.conduct', 'student_id', string='Điểm rèn luyện')
 
     grade_count = fields.Integer(string='Số môn đã có điểm', compute='_compute_grade_count')
     debt_course_count = fields.Integer(string='Số môn đang nợ', compute='_compute_grade_count')
     timetable_count = fields.Integer(string='Số buổi học', compute='_compute_timetable_count')
+    conduct_count = fields.Integer(string='Số kỳ có điểm rèn luyện', compute='_compute_conduct_count')
     helpdesk_ticket_count = fields.Integer(string='Số phiếu hỗ trợ', compute='_compute_helpdesk_ticket_count')
 
     def _compute_grade_count(self):
@@ -36,6 +49,12 @@ class EautBaseStudent(models.Model):
         for student in self:
             student.timetable_count = Timetable.search_count([('student_id', '=', student.id)])
 
+
+    def _compute_conduct_count(self):
+        Conduct = self.env['eaut.student.care.conduct']
+        for student in self:
+            student.conduct_count = Conduct.search_count([('student_id', '=', student.id)])
+
     def _compute_helpdesk_ticket_count(self):
         Ticket = self.env['helpdesk.ticket']
         for student in self:
@@ -47,14 +66,14 @@ class EautBaseStudent(models.Model):
         self.ensure_one()
         matches = []
         if self.code:
-            matches.append([('student_code', '=', self.code)])
+            matches.append(('student_code', '=', self.code))
         if self.email:
-            matches.append([('partner_email', '=', self.email)])
+            matches.append(('partner_email', '=', self.email))
         if self.phone:
-            matches.append([('partner_phone', '=', self.phone)])
+            matches.append(('partner_phone', '=', self.phone))
         if not matches:
             return [('id', '=', 0)]
-        return expression.OR(matches)
+        return ['|'] * (len(matches) - 1) + matches
 
     def action_view_grades(self):
         self.ensure_one()
@@ -88,6 +107,30 @@ class EautBaseStudent(models.Model):
             'domain': [('student_id', '=', self.id)],
             'context': {'default_student_id': self.id},
         }
+
+    def action_view_conduct(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Điểm rèn luyện'),
+            'res_model': 'eaut.student.care.conduct',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id)],
+            'context': {'default_student_id': self.id},
+        }
+
+    def action_sync_data(self):
+        """Đồng bộ điểm, chuyên cần, rèn luyện, TKB... từ hệ thống đào tạo bên ngoài.
+
+        Việc kết nối API thực tế sẽ được cấu hình sau; hiện tại đây chỉ là
+        điểm vào (nút bấm / action hàng loạt) để khi có thông tin API sẽ
+        cắm logic gọi API + upsert dữ liệu vào đây mà không cần đổi giao diện.
+        """
+        raise UserError(_(
+            'Chưa cấu hình kết nối tới hệ thống dữ liệu bên ngoài. '
+            'Vui lòng liên hệ quản trị viên để thiết lập trước khi đồng bộ.'
+        ))
+
 
     def action_view_helpdesk_tickets(self):
         self.ensure_one()

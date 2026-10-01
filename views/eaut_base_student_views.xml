@@ -21,6 +21,10 @@
                             class="oe_stat_button" icon="fa-calendar">
                         <field name="timetable_count" widget="statinfo" string="TKB"/>
                     </button>
+                      <button type="object" name="action_view_conduct"
+                            class="oe_stat_button" icon="fa-star">
+                        <field name="conduct_count" widget="statinfo" string="Rèn luyện"/>
+                    </button>
                     <button type="object" name="action_view_helpdesk_tickets"
                             class="oe_stat_button" icon="fa-life-ring">
                         <field name="helpdesk_ticket_count" widget="statinfo" string="Phiếu hỗ trợ"/>
@@ -30,7 +34,19 @@
 
             <field name="program_id" position="after">
                 <field name="state_id"/>
+                 <field name="classroom_id"/>
             </field>
+
+              <field name="phone" position="after">
+                <field name="gender"/>
+            </field>
+
+             <xpath expr="//sheet" position="before">
+                <header>
+                    <button type="object" name="action_sync_data" string="Đồng bộ dữ liệu"
+                            class="btn-primary"/>
+                </header>
+            </xpath>
 
         </field>
     </record>
