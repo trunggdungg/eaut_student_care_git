@@ -14,6 +14,17 @@ class EautBaseStudent(models.Model):
         tracking=True,
     )
 
+    classroom_id = fields.Many2one(
+        'eaut.student.care.classroom',
+        string='Lớp',
+        tracking=True,
+    )
+    gender = fields.Selection([
+        ('male', 'Nam'),
+        ('female', 'Nữ'),
+        ('other', 'Khác'),
+    ], string='Giới tính')
+
     grade_ids = fields.One2many('eaut.student.care.grade', 'student_id', string='Bảng điểm')
     timetable_ids = fields.One2many('eaut.student.care.timetable', 'student_id', string='Thời khóa biểu')
     conduct_ids = fields.One2many('eaut.student.care.conduct', 'student_id', string='Điểm rèn luyện')

@@ -72,6 +72,12 @@
               action="action_eaut_student_care_major_course"
               sequence="55"/>
 
+    <menuitem id="menu_eaut_student_care_classroom"
+              name="Lớp"
+              parent="menu_eaut_student_care_config"
+              action="action_eaut_student_care_classroom"
+              sequence="25"/>
+
     <menuitem id="menu_eaut_student_care_state"
               name="Trạng thái"
               parent="menu_eaut_student_care_config"

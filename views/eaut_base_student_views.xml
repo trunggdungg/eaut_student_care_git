@@ -34,6 +34,11 @@
 
             <field name="program_id" position="after">
                 <field name="state_id"/>
+                <field name="classroom_id"/>
+            </field>
+
+            <field name="phone" position="after">
+                <field name="gender"/>
             </field>
 
             <xpath expr="//sheet" position="before">

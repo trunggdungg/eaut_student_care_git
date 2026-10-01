@@ -28,6 +28,7 @@ Chăm sóc sinh viên:
         'views/eaut_student_care_state_views.xml',
         'views/eaut_student_care_semester_views.xml',
         'views/eaut_student_care_course_views.xml',
+        'views/eaut_student_care_classroom_views.xml',
         'views/eaut_student_care_major_course_views.xml',
         'views/eaut_student_care_grade_views.xml',
         'views/eaut_student_care_conduct_views.xml',
